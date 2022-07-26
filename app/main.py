@@ -87,3 +87,34 @@ class Login(Resource):
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
+
+class GetAllUsers(Resource):
+    def get(self):
+        try:
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "SELECT * FROM users"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            if result == None:
+                return {"error": True, "msg": 'No user'}
+            users = []
+            for user in result:
+                userData = {
+                    'userID': user[0],
+                    'fullName': user[1],
+                    'email': user[2],
+                    'walletBalance': user[4],
+                    'dateJoined': user[5],
+                }
+                users.append(userData)
+            users.reverse()
+            return {"error": False, "users": users}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
