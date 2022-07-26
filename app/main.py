@@ -56,3 +56,34 @@ class SignUp(Resource):
         except Exception as e:
             return {"error": True, "msg": str(e)}
 
+
+class Login(Resource):
+    def post(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            password = hashlib.sha256(data['password'].encode()).hexdigest()
+            sql = "SELECT * FROM users WHERE email='{}' AND password='{}'".format(
+                data['email'], password)
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            if result == None:
+                return {"error": True, "msg": 'Invalid login details'}
+            user = {
+                'userID': result[0],
+                'fullName': result[1],
+                'email': result[2],
+                'walletBalance': result[4],
+            }
+            return {"error": False, "msg": "Logged in sucessfully", 'user': user}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
