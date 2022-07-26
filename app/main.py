@@ -21,3 +21,38 @@ def after_request(response):
 def index():
     return "up and running :)"
 
+class SignUp(Resource):
+    def post(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+
+            sql = "SELECT * FROM users WHERE email='{}'".format(data['email'])
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            if result != None:
+                return {"error": True, "msg": 'Email address is taken'}
+            sql = "SELECT COUNT(*) FROM users "
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            userID = "TD-U-{:04d}".format(result[0] + 1)
+            password = hashlib.sha256(data['password'].encode()).hexdigest()
+            dateJoined = datetime.datetime.now().strftime("%d %b, %Y")
+            sql = "INSERT INTO users (userID, fullName, email, password, walletBalance, dateJoined) VALUES (%s, %s, %s, %s, %s, %s)"
+            val = (userID, data['fullName'],
+                data['email'], password, 0, dateJoined)
+            cursor.execute(sql, val)
+            mydb.commit()
+            return {"error": False, "msg": "Created User Successfully", 'userID': userID}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
+
