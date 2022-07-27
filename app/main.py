@@ -181,3 +181,34 @@ class GetAllTrips(Resource):
         except Exception as e:
             return {"error": True, "msg": str(e)}
         
+class GetTrip(Resource):
+    def post(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "SELECT * FROM trips WHERE tripID = '{}'".format(
+                data['tripID'])
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            if result == None:
+                return {"error": True, "msg": 'Trip Does Not Exist'}
+            trip = {
+                'tripID': result[0],
+                'origin': result[1],
+                'destination': result[2],
+                'price': result[3],
+                'time': result[4],
+                'dateCreated': result[5],
+            }
+            return {"error": False, "trip": trip}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
