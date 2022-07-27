@@ -284,3 +284,35 @@ class CreateBooking(Resource):
         except Exception as e:
             return {"error": True, "msg": str(e)}
 
+class GetAllBookings(Resource):
+    def get(self):
+        try:
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "SELECT * FROM bookings"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            if result == None:
+                return {"error": True, "msg": 'No Booking with that ID'}
+            bookings = []
+            for booking in result:
+                bookingData = {
+                    'tripID': booking[0],
+                    'userID': booking[1],
+                    'fullName': booking[2],
+                    'tripName': booking[3],
+                    'amountPaid': booking[4],
+                    'tripTime': booking[5],
+                    'dateOfTrip': booking[6],
+                }
+                bookings.append(bookingData)
+            bookings.reverse()
+            return {"error": False, "bookings": bookings}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
