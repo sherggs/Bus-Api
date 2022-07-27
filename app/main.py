@@ -355,3 +355,34 @@ class GetBookings(Resource):
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
+        
+        
+class FundWallet(Resource):
+    def post(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "SELECT walletBalance FROM users WHERE userID = '{}'".format(
+                data['userID'])
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            if result == None:
+                return {"error": True, "msg": 'User Does Not Exist'}
+            balance = result[0]
+            balance = int(balance) + int(data['amount'])
+            sql = "UPDATE users SET walletBalance = %s WHERE userID = %s"
+            val = (balance, data['userID'])
+            cursor.execute(sql, val)
+            mydb.commit()
+            return {"error": False, "msg": 'Successfully Funded Wallet', 'balance': balance}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
