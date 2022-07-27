@@ -28,10 +28,10 @@ class SignUp(Resource):
             data = json.loads(data)
 
             mydb = mysql.connector.connect(
-                host="localhost:8080",
-                user="root",
-                database="theDigitalBus",
-                password="",
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
             )
             cursor = mydb.cursor()
 
@@ -43,7 +43,7 @@ class SignUp(Resource):
             sql = "SELECT COUNT(*) FROM users "
             cursor.execute(sql)
             result = cursor.fetchone()
-            userID = "TD-U-{:04d}".format(result[0] + 1)
+            userID = "DG-U-{:04d}".format(result[0] + 1)
             password = hashlib.sha256(data['password'].encode()).hexdigest()
             dateJoined = datetime.datetime.now().strftime("%d %b, %Y")
             sql = "INSERT INTO users (userID, fullName, email, password, walletBalance, dateJoined) VALUES (%s, %s, %s, %s, %s, %s)"
@@ -136,7 +136,7 @@ class CreateTrip(Resource):
             sql = "SELECT COUNT(*) FROM trips "
             cursor.execute(sql)
             result = cursor.fetchone()
-            tripID = "TD-T-{:04d}".format(result[0] + 1)
+            tripID = "DG-T-{:04d}".format(result[0] + 1)
             dateCreated = datetime.datetime.now().strftime("%d %b, %Y")
             sql = "INSERT INTO trips (tripID, origin, destination, price, time, dateCreated) VALUES (%s, %s, %s, %s, %s, %s)"
             val = (tripID, data['origin'],
