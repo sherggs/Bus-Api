@@ -357,7 +357,7 @@ class GetBookings(Resource):
             return {"error": True, "msg": str(e)}
         
         
-class DeleteBooking(Resource):
+class DeleteBookings(Resource):
     def delete(self):
         try:
             data = request.data
@@ -445,3 +445,24 @@ class GetMetrics(Resource):
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
+        
+
+api.add_resource(SignUp, '/signUp')
+api.add_resource(Login, '/logIn')
+api.add_resource(GetAllUsers, '/getAllUsers')
+api.add_resource(CreateTrip, '/createTrip')
+api.add_resource(GetAllTrips, '/getAllTrips')
+api.add_resource(GetTrip, '/getTrip')
+api.add_resource(UpdateTrip, '/updateTrip')
+api.add_resource(DeleteTrip, '/deleteTrip')
+api.add_resource(CreateBooking, '/createBooking')
+api.add_resource(GetAllBookings, '/getAllBookings')
+api.add_resource(GetBookings, '/getBookings')
+api.add_resource(DeleteBookings, '/deleteBookings')
+api.add_resource(GetMetrics, '/getMetrics')
+api.add_resource(FundWallet, '/fundWallet')
+
+
+
+if '__main__' == __name__:
+    app.run(debug=True, port="5000")
