@@ -229,11 +229,33 @@ class UpdateTrip(Resource):
             cursor = mydb.cursor()
             sql = "UPDATE trips SET origin = %s, destination = %s, price = %s, time = %s WHERE tripID = %s"
             val = (data['origin'],
-                   data['destination'], data['price'], data['time'], data['tripID'])
+                data['destination'], data['price'], data['time'], data['tripID'])
 
             cursor.execute(sql, val)
             mydb.commit()
             return {"error": False, "msg": "Updated Trip Successfully"}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
+        
+class DeleteTrip(Resource):
+    def delete(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "DELETE FROM trips WHERE tripID = '{}'".format(
+                data['tripID'])
+            cursor.execute(sql)
+            mydb.commit()
+            return {"error": False, "msg": 'Deleted Trip Successfully'}
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
