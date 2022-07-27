@@ -28,10 +28,10 @@ class SignUp(Resource):
             data = json.loads(data)
 
             mydb = mysql.connector.connect(
-                host="divinechristianassembly.com",
-                user="u505151495_digibus",
-                database="u505151495_digibus",
-                password="Iaamfsd,gu2i",
+                host="localhost:8080",
+                user="root",
+                database="theDigitalBus",
+                password="",
             )
             cursor = mydb.cursor()
 
@@ -115,6 +115,35 @@ class GetAllUsers(Resource):
                 users.append(userData)
             users.reverse()
             return {"error": False, "users": users}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
+        
+class CreateTrip(Resource):
+    def post(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+
+            sql = "SELECT COUNT(*) FROM trips "
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            tripID = "TD-T-{:04d}".format(result[0] + 1)
+            dateCreated = datetime.datetime.now().strftime("%d %b, %Y")
+            sql = "INSERT INTO trips (tripID, origin, destination, price, time, dateCreated) VALUES (%s, %s, %s, %s, %s, %s)"
+            val = (tripID, data['origin'],
+                data['destination'], data['price'], data['time'], dateCreated)
+            cursor.execute(sql, val)
+            mydb.commit()
+            return {"error": False, "msg": "Created Trip Successfully, Enjoy your Journey", "tripID": tripID}
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
