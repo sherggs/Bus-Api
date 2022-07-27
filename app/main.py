@@ -259,3 +259,28 @@ class DeleteTrip(Resource):
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
+        
+class CreateBooking(Resource):
+    def post(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+
+            sql = "INSERT INTO bookings (tripID, userID, fullName, tripName, amountPaid, tripTime, dateOfTrip) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            val = (data['tripID'], data['userID'], data['fullName'], data['tripName'],
+                   data['amountPaid'], data['tripTime'], data['dateOfTrip'])
+            cursor.execute(sql, val)
+            mydb.commit()
+            return {"error": False, "msg": "Created Booking Successfully"}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
+
