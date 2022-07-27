@@ -357,6 +357,29 @@ class GetBookings(Resource):
             return {"error": True, "msg": str(e)}
         
         
+        
+        
+class DeleteBooking(Resource):
+    def delete(self):
+        try:
+            data = request.data
+            data = json.loads(data)
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "DELETE FROM bookings WHERE userID = '{}'".format(
+                data['userID'])
+            cursor.execute(sql)
+            mydb.commit()
+            return {"error": False, "msg": 'Deleted Booking Successfully'}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
 class FundWallet(Resource):
     def post(self):
         try:
