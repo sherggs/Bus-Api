@@ -147,3 +147,37 @@ class CreateTrip(Resource):
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
+        
+        
+class GetAllTrips(Resource):
+    def get(self):
+        try:
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "SELECT * FROM trips"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            if result == None:
+                return {"error": True, "msg": 'No trip'}
+            trips = []
+            for trip in result:
+                tripData = {
+                    'tripID': trip[0],
+                    'origin': trip[1],
+                    'destination': trip[2],
+                    'price': trip[3],
+                    'time': trip[4],
+                    'dateCreated': trip[5],
+                }
+                trips.append(tripData)
+            trips.reverse()
+            return {"error": False, "trips": trips}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
+        
