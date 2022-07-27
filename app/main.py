@@ -357,8 +357,6 @@ class GetBookings(Resource):
             return {"error": True, "msg": str(e)}
         
         
-        
-        
 class DeleteBooking(Resource):
     def delete(self):
         try:
@@ -380,6 +378,8 @@ class DeleteBooking(Resource):
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
+        
+        
 class FundWallet(Resource):
     def post(self):
         try:
@@ -406,6 +406,42 @@ class FundWallet(Resource):
             cursor.execute(sql, val)
             mydb.commit()
             return {"error": False, "msg": 'Successfully Funded Wallet', 'balance': balance}
+
+        except Exception as e:
+            return {"error": True, "msg": str(e)}
+        
+        
+        
+        
+class GetMetrics(Resource):
+    def get(self):
+        try:
+
+            mydb = mysql.connector.connect(
+                host="divinechristianassembly.com",
+                user="u505151495_digibus",
+                database="u505151495_digibus",
+                password="Iaamfsd,gu2i",
+            )
+            cursor = mydb.cursor()
+            sql = "SELECT COUNT(*) FROM users "
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            users = result[0]
+            sql = "SELECT COUNT(*) FROM trips "
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            trips = result[0]
+            sql = "SELECT COUNT(*) FROM bookings "
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            bookings = result[0]
+            metricData = {
+                'users': users,
+                'trips': trips,
+                'bookings': bookings
+            }
+            return {"error": False, "metrics": metricData}
 
         except Exception as e:
             return {"error": True, "msg": str(e)}
