@@ -276,7 +276,7 @@ class CreateBooking(Resource):
 
             sql = "INSERT INTO bookings (tripID, userID, fullName, tripName, amountPaid, tripTime, dateOfTrip) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             val = (data['tripID'], data['userID'], data['fullName'], data['tripName'],
-                   data['amountPaid'], data['tripTime'], data['dateOfTrip'])
+                data['amountPaid'], data['tripTime'], data['dateOfTrip'])
             cursor.execute(sql, val)
             mydb.commit()
             return {"error": False, "msg": "Created Booking Successfully"}
