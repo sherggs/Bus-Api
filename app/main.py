@@ -19,7 +19,7 @@ def after_request(response):
 
 @app.route('/')
 def index():
-    return "up and running :)"
+    return "up and running  for the database :)"
 
 class SignUp(Resource):
     def post(self):
